@@ -1,0 +1,75 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "process",
+            "label": "cargo build debug",
+            "group": "build",
+            "command": "cargo",
+            "args": [
+                "build"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "type": "process",
+            "label": "cargo run debug",
+            "group": "build",
+            "command": "cargo",
+            "args": [
+                "run"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "type": "process",
+            "label": "cargo build release",
+            "group": "build",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--release"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "type": "process",
+            "label": "cargo run release",
+            "group": "build",
+            "command": "cargo",
+            "args": [
+                "run",
+                "--release"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "type": "process",
+            "label": "cargo clean",
+            "command": "cargo",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "type": "process",
+            "label": "cargo fmt",
+            "command": "cargo",
+            "args": [
+                "fmt"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
