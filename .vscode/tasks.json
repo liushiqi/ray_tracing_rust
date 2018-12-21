@@ -54,6 +54,17 @@
             ]
         },
         {
+            "type": "shell",
+            "label": "cargo clippy",
+            "command": "cargo",
+            "args": [
+                "clippy"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
             "type": "process",
             "label": "cargo clean",
             "command": "cargo",

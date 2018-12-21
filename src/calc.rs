@@ -30,7 +30,7 @@ pub fn schlick(cosine: f64, index: f64) -> f64 {
 }
 
 pub fn color(ray: Ray, env: &Arc<Hitable>, depth: i64) -> Color {
-    if let Some(rec) = env.hit(&ray, 0.000001..std::f64::MAX) {
+    if let Some(rec) = env.hit(&ray, 0.000_001..std::f64::MAX) {
         if let Some((attenuation, scattered)) = rec.clone().material.scatter(ray, rec) {
             if depth < 50 {
                 color(scattered, env, depth + 1).component_mul(&attenuation)
@@ -70,7 +70,7 @@ pub fn random_scene() -> Arc<Hitable> {
     for a in -11..11 {
         for b in -11..11 {
             let choose_mat = rng.gen::<f64>();
-            let center = Vector3::new(a as f64 + 0.9 * rng.gen::<f64>(), 0.2, b as f64 + 0.9 * rng.gen::<f64>());
+            let center = Vector3::new(f64::from(a) + 0.9 * rng.gen::<f64>(), 0.2, f64::from(b) + 0.9 * rng.gen::<f64>());
             if (center - Vector3::new(4.0, 0.2, 0.0)).norm() > 0.9 {
                 hitables.push(if choose_mat < 0.8 {
                     Arc::from(Sphere::new_from_vec(

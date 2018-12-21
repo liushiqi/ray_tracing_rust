@@ -1,5 +1,5 @@
 [package]
-name = "ray_tracing"
+name = "rtrs"
 version = "0.1.0"
 authors = ["Liu Shiqi <liushiqi17@mails.ucas.ac.cn>"]
 edition = "2018"

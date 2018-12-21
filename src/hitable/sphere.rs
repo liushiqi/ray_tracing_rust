@@ -48,6 +48,6 @@ impl Hitable for Sphere {
                 ));
             }
         }
-        return None;
+        None
     }
 }

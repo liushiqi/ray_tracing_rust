@@ -13,5 +13,5 @@ impl Ray {
 
     pub fn direction(&self) -> &Vector3<f64> { &self.to }
 
-    pub fn point_at(&self, t: f64) -> Vector3<f64> { &self.from + t * &self.to }
+    pub fn point_at(&self, t: f64) -> Vector3<f64> { self.from + t * self.to }
 }
