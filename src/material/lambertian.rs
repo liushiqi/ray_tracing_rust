@@ -1,6 +1,6 @@
 use nalgebra::{Unit, Vector3};
 
-use crate::{calc::{Color, random_vector},
+use crate::{calc::{random_vector, Color},
             hitable::HitRecord,
             material::Material,
             ray::Ray};
@@ -16,7 +16,7 @@ impl Lambertian {
 
 impl Material for Lambertian {
     fn scatter(&self, _: Ray, record: HitRecord) -> Option<(Color, Ray)>
-               where Self: Sized {
+    where Self: Sized {
         let target = record.position + record.normal + random_vector();
         Some((self.albedo, Ray::new(record.position, Unit::new_normalize(target - record.position))))
     }

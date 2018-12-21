@@ -1,7 +1,7 @@
 use nalgebra::{Unit, Vector3};
 use std::sync::Arc;
 
-use crate::{hitable::{Hitable, HitRecord},
+use crate::{hitable::{HitRecord, Hitable},
             material::Material,
             ray::Ray};
 
@@ -12,7 +12,11 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(x: f64, y: f64, z: f64, radius: f64, material: Arc<Material>) -> Self {
+    pub fn new_from_vec(center: Vector3<f64>, radius: f64, material: Arc<Material>) -> Self {
+        Sphere { center, radius, material }
+    }
+
+    pub fn new_from_f64(x: f64, y: f64, z: f64, radius: f64, material: Arc<Material>) -> Self {
         Sphere { center: Vector3::new(x, y, z), radius, material }
     }
 }

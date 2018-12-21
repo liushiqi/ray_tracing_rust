@@ -1,8 +1,8 @@
 use crate::{calc::Color, hitable::HitRecord, ray::Ray};
 
+pub mod dielectric;
 pub mod lambertian;
 pub mod metal;
-pub mod dielectric;
 
 pub type Lambertian = self::lambertian::Lambertian;
 pub type Metal = self::metal::Metal;

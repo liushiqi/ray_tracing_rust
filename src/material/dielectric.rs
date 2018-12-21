@@ -1,7 +1,7 @@
 use nalgebra::{Unit, Vector3};
 use rand::random;
 
-use crate::{calc::{Color, reflect, refract, schlick},
+use crate::{calc::{reflect, refract, schlick, Color},
             hitable::HitRecord,
             material::Material,
             ray::Ray};
@@ -24,14 +24,20 @@ impl Material for Dielectric {
             (record.normal, 1.0 / self.index, -ray_in.direction().dot(&record.normal))
         };
         let reflect_prob = schlick(cosine, self.index);
-        Some(if let Some(refracted) = refract(Unit::new_normalize(*ray_in.direction()), Unit::new_normalize(normal), index) {
-            (Vector3::new(1.0, 1.0, 1.0), Ray::new(record.position, Unit::new_normalize(if random::<f64>() < reflect_prob {
-                reflected
+        Some(
+            if let Some(refracted) =
+                refract(Unit::new_normalize(*ray_in.direction()), Unit::new_normalize(normal), index)
+            {
+                (
+                    Vector3::new(1.0, 1.0, 1.0),
+                    Ray::new(
+                        record.position,
+                        Unit::new_normalize(if random::<f64>() < reflect_prob { reflected } else { refracted }),
+                    ),
+                )
             } else {
-                refracted
-            })))
-        } else {
-            (Vector3::new(1.0, 1.0, 1.0), Ray::new(record.position, Unit::new_normalize(reflected)))
-        })
+                (Vector3::new(1.0, 1.0, 1.0), Ray::new(record.position, Unit::new_normalize(reflected)))
+            },
+        )
     }
 }

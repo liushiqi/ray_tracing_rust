@@ -1,6 +1,6 @@
 use nalgebra::{Unit, Vector3};
 
-use crate::{calc::{Color, random_vector, reflect},
+use crate::{calc::{random_vector, reflect, Color},
             hitable::HitRecord,
             material::Material,
             ray::Ray};

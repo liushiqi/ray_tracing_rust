@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{hitable::{Hitable, HitRecord},
+use crate::{hitable::{HitRecord, Hitable},
             ray::Ray};
 
 pub struct HitableList {
