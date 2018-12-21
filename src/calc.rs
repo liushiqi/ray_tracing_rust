@@ -57,7 +57,7 @@ pub fn random_vector() -> Vector3<f64> {
     }
 }
 
-pub fn random_scene() -> Arc<Hitable> {
+pub fn get_scene_from_file() -> Arc<Hitable> {
     let mut rng = rand::thread_rng();
     let mut hitables: Vec<Arc<Hitable>> = Vec::new();
     hitables.push(Arc::from(Sphere::new_from_f64(

@@ -6,7 +6,7 @@ use crate::{calc::{reflect, refract, schlick, Color},
             material::Material,
             ray::Ray};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Dielectric {
     index: f64,
 }

@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{sync::Arc, fmt::Debug};
 
 use nalgebra::{Unit, Vector3};
 
@@ -10,7 +10,7 @@ pub mod sphere;
 pub type Sphere = self::sphere::Sphere;
 pub type HitableList = self::list::HitableList;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct HitRecord {
     pub t: f64,
     pub position: Vector3<f64>,
@@ -24,6 +24,6 @@ impl HitRecord {
     }
 }
 
-pub trait Hitable {
+pub trait Hitable: Debug {
     fn hit(&self, ray: &Ray, range: std::ops::Range<f64>) -> Option<HitRecord>;
 }

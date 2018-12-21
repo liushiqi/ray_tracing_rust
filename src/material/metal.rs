@@ -5,7 +5,7 @@ use crate::{calc::{random_vector, reflect, Color},
             material::Material,
             ray::Ray};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Metal {
     albedo: Color,
     fuzz: f64,

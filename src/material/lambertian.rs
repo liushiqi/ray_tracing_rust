@@ -5,7 +5,7 @@ use crate::{calc::{random_vector, Color},
             material::Material,
             ray::Ray};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Lambertian {
     albedo: Color,
 }

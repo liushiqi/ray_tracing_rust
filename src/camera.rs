@@ -2,6 +2,7 @@ use nalgebra::{Unit, Vector3};
 
 use crate::ray::Ray;
 
+#[derive(Debug)]
 pub struct Camera {
     origin: Vector3<f64>,
     corner: Vector3<f64>,

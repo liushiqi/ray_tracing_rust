@@ -5,8 +5,8 @@
 use image::{ImageBuffer, Rgb};
 use nalgebra::Vector3;
 
-use calc::{color, random_scene, Color};
-use camera::Camera;
+use crate::calc::{color, get_scene_from_file, Color};
+use crate::camera::Camera;
 
 mod calc;
 mod camera;
@@ -26,7 +26,7 @@ fn main() {
         90.0,
         f64::from(IMAGE_WIDTH) / f64::from(IMAGE_HEIGHT),
     );
-    let scene = random_scene();
+    let scene = get_scene_from_file();
     ImageBuffer::from_fn(IMAGE_WIDTH, IMAGE_HEIGHT, |x, y| {
         let mut col = Color::new(0.0, 0.0, 0.0);
         for _ in 0..SAMPLES {
@@ -42,4 +42,8 @@ fn main() {
     })
     .save("render.png")
     .unwrap();
+}
+
+fn handle_args() {
+    
 }
