@@ -1,0 +1,59 @@
+scene:
+  kind: normal
+  width: 2560
+  height: 1440
+  camera:
+    from:
+      - -6.0
+      - 4.0
+      - 1.0
+    look_at:
+      - 0.0
+      - 0.0
+      - -1.0
+    up:
+      - 0.0
+      - 1.0
+      - 0.0
+    vertical: 90.0
+  world:
+    kind: hitable_list
+    hitables:
+      -
+        hitable:
+          kind: sphere
+          pos:
+            - 0.0
+            - 1.0
+            - 0.0
+          material:
+            kind: dielectric
+            index: 1.5
+      -
+        hitable:
+          kind: sphere
+          pos:
+            - -4.0
+            - 1.0
+            - 0.0
+          material:
+            kind: lambertian
+            color:
+              - 0.4
+              - 0.2
+              - 0.1
+      -
+        hitable:
+          kind: sphere
+          pos:
+            - 4.0
+            - 1.0
+            - 0.0
+          material:
+            kind: metal
+            color:
+              - 0.7
+              - 0.6
+              - 0.5
+            fuzz: 1.0
+        
