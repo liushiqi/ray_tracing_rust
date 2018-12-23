@@ -2,6 +2,7 @@
 name = "rtrs"
 version = "0.1.0"
 authors = ["Liu Shiqi <liushiqi17@mails.ucas.ac.cn>"]
+description = "A simple ray tracing program written in rust based on *Ray Tracing In A Week*"
 edition = "2018"
 
 [dependencies]
