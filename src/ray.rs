@@ -1,4 +1,4 @@
-use nalgebra::{Unit, Vector3};
+use cgmath::{InnerSpace, Vector3};
 
 #[derive(Debug)]
 pub struct Ray {
@@ -7,7 +7,7 @@ pub struct Ray {
 }
 
 impl Ray {
-    pub fn new(orig: Vector3<f64>, dir: Unit<Vector3<f64>>) -> Ray { Ray { from: orig, to: *dir.as_ref() } }
+    pub fn new(orig: Vector3<f64>, dir: Vector3<f64>) -> Ray { Ray { from: orig, to: dir.normalize() } }
 
     pub fn origin(&self) -> &Vector3<f64> { &self.from }
 

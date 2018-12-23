@@ -1,5 +1,6 @@
-use nalgebra::{Unit, Vector3};
 use std::sync::Arc;
+
+use cgmath::{InnerSpace, Vector3};
 
 use crate::{hitable::{HitRecord, Hitable},
             material::Material,
@@ -25,9 +26,9 @@ impl Sphere {
 impl Hitable for Sphere {
     fn hit(&self, ray: &Ray, range: std::ops::Range<f64>) -> Option<HitRecord> {
         let oc = self.center - ray.origin();
-        let a = ray.direction().dot(ray.direction());
-        let b = -oc.dot(ray.direction()) * 2.0;
-        let c = oc.dot(&oc) - self.radius * self.radius;
+        let a = ray.direction().dot(*ray.direction());
+        let b = -oc.dot(*ray.direction()) * 2.0;
+        let c = oc.dot(oc) - self.radius * self.radius;
         let discriminant = b * b - 4.0 * a * c;
         if discriminant > 0.0 {
             let temp = (-b - discriminant.sqrt()) / (2.0 * a);
@@ -35,7 +36,7 @@ impl Hitable for Sphere {
                 return Some(HitRecord::new(
                     temp,
                     ray.point_at(temp),
-                    Unit::new_normalize((ray.point_at(temp) - self.center) / self.radius),
+                    ((ray.point_at(temp) - self.center) / self.radius).normalize(),
                     Arc::clone(&self.material),
                 ));
             }
@@ -44,7 +45,7 @@ impl Hitable for Sphere {
                 return Some(HitRecord::new(
                     temp,
                     ray.point_at(temp),
-                    Unit::new_normalize((ray.point_at(temp) - self.center) / self.radius),
+                    ((ray.point_at(temp) - self.center) / self.radius).normalize(),
                     Arc::clone(&self.material),
                 ));
             }

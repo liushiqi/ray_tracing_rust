@@ -5,12 +5,20 @@ authors = ["Liu Shiqi <liushiqi17@mails.ucas.ac.cn>"]
 edition = "2018"
 
 [dependencies]
-nalgebra = "0.16.12"
 image = "0.20.1"
 rand = "0.6.1"
-serde = "1.0.82"
+serde_derive = "1.0.82"
+serde-value = "0.5.3"
 serde_yaml = "0.8.8"
 
 [dependencies.clap]
 version = "2.32.0"
 features = [ "suggestions", "color" ]
+
+[dependencies.cgmath]
+version = "0.16.1"
+features = [ "serde" ]
+
+[dependencies.serde]
+version = "1.0.82"
+features = [ "rc" ]

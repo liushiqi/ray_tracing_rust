@@ -1,4 +1,4 @@
-use nalgebra::{Unit, Vector3};
+use cgmath::{InnerSpace, Vector3};
 
 use crate::{calc::{random_vector, reflect, Color},
             hitable::HitRecord,
@@ -17,9 +17,9 @@ impl Metal {
 
 impl Material for Metal {
     fn scatter(&self, ray_in: Ray, record: HitRecord) -> Option<(Color, Ray)> {
-        let reflected = reflect(Unit::new_normalize(*ray_in.direction()), Unit::new_normalize(record.normal));
-        if reflected.dot(&record.normal) > 0.0 {
-            Some((self.albedo, Ray::new(record.position, Unit::new_normalize(reflected + self.fuzz * random_vector()))))
+        let reflected = reflect(ray_in.direction().normalize(), record.normal.normalize());
+        if reflected.dot(record.normal) > 0.0 {
+            Some((self.albedo, Ray::new(record.position, (reflected + self.fuzz * random_vector()).normalize())))
         } else {
             None
         }

@@ -1,21 +1,19 @@
 use std::sync::Arc;
 
-use nalgebra::{Unit, Vector3};
+use cgmath::{ElementWise, InnerSpace, Vector3};
 use rand::Rng;
 
 use crate::{hitable::Hitable, ray::Ray};
 
 pub type Color = Vector3<f64>;
 
-pub fn reflect(v: Unit<Vector3<f64>>, n: Unit<Vector3<f64>>) -> Vector3<f64> {
-    v.as_ref() - n.as_ref() * v.dot(n.as_ref()) * 2.0
-}
+pub fn reflect(v: Vector3<f64>, n: Vector3<f64>) -> Vector3<f64> { v - n * v.dot(n) * 2.0 }
 
-pub fn refract(v: Unit<Vector3<f64>>, n: Unit<Vector3<f64>>, index: f64) -> Option<Vector3<f64>> {
-    let dt = v.dot(n.as_ref());
+pub fn refract(v: Vector3<f64>, n: Vector3<f64>, index: f64) -> Option<Vector3<f64>> {
+    let dt = v.dot(n);
     let discriminant = 1.0 - index * index * (1.0 - dt * dt);
     if discriminant > 0.0 {
-        Some((v.as_ref() - n.as_ref() * dt) * index - n.as_ref() * discriminant.sqrt())
+        Some((v - n * dt) * index - n * discriminant.sqrt())
     } else {
         None
     }
@@ -31,7 +29,7 @@ pub fn color(ray: Ray, env: &Arc<Hitable>, depth: i64) -> Color {
     if let Some(rec) = env.hit(&ray, 0.000_001..std::f64::MAX) {
         if let Some((attenuation, scattered)) = rec.clone().material.scatter(ray, rec) {
             if depth < 50 {
-                color(scattered, env, depth + 1).component_mul(&attenuation)
+                color(scattered, env, depth + 1).mul_element_wise(attenuation)
             } else {
                 Vector3::new(0.0, 0.0, 0.0)
             }
@@ -49,7 +47,7 @@ pub fn random_vector() -> Vector3<f64> {
     loop {
         let (x, y, z) = rng.gen::<(f64, f64, f64)>();
         let v = Vector3::new(x, y, z) * 2.0 - Vector3::new(1.0, 1.0, 1.0);
-        if v.norm().sqrt() <= 1.0 {
+        if v.magnitude().sqrt() <= 1.0 {
             break v;
         }
     }

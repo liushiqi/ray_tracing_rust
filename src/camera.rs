@@ -1,4 +1,4 @@
-use nalgebra::{Unit, Vector3};
+use cgmath::{InnerSpace, Vector3};
 
 use crate::ray::Ray;
 
@@ -16,8 +16,8 @@ impl Camera {
         let half_height = (theta / 2.0).tan();
         let half_width = aspect * half_height;
         let w = (look_from - look_at).normalize();
-        let u = up.cross(&w).normalize();
-        let v = w.cross(&u);
+        let u = up.cross(w).normalize();
+        let v = w.cross(u);
         Camera {
             corner: look_from - half_width * u + half_height * v - w,
             horizontal: 2.0 * half_width * u,
@@ -27,6 +27,6 @@ impl Camera {
     }
 
     pub fn get_ray(&self, u: f64, v: f64) -> Ray {
-        Ray::new(self.origin, Unit::new_normalize(self.corner + self.horizontal * u + self.vertical * v - self.origin))
+        Ray::new(self.origin, (self.corner + self.horizontal * u + self.vertical * v - self.origin).normalize())
     }
 }

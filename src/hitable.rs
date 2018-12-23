@@ -1,6 +1,6 @@
 use std::{fmt::Debug, sync::Arc};
 
-use nalgebra::{Unit, Vector3};
+use cgmath::{InnerSpace, Vector3};
 
 use crate::{material::Material, ray::Ray};
 
@@ -19,8 +19,8 @@ pub struct HitRecord {
 }
 
 impl HitRecord {
-    pub fn new(t: f64, position: Vector3<f64>, normal: Unit<Vector3<f64>>, material: Arc<Material>) -> Self {
-        HitRecord { t, position, normal: *normal.as_ref(), material }
+    pub fn new(t: f64, position: Vector3<f64>, normal: Vector3<f64>, material: Arc<Material>) -> Self {
+        HitRecord { t, position, normal: normal.normalize(), material }
     }
 }
 

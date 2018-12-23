@@ -1,21 +1,28 @@
 use std::sync::Arc;
 
-use nalgebra::Vector3;
+use cgmath::{InnerSpace, Vector3};
 use rand::Rng;
 
 use crate::{camera::Camera,
             hitable::{Hitable, HitableList, Sphere},
             material::{Dielectric, Lambertian, Metal}};
 
+#[derive(Debug)]
 pub struct Scene {
     width: u32,
     height: u32,
+    samples: u32,
     camera: Camera,
     world: Arc<Hitable>,
 }
 
 impl Scene {
-    pub fn new_random(width: u32, height: u32) -> Self {
+    #[allow(dead_code)]
+    pub fn new(width: u32, height: u32, samples: u32, camera: Camera, world: Arc<Hitable>) -> Self {
+        Scene { width, height, samples, camera, world }
+    }
+
+    pub fn new_random(width: u32, height: u32, samples: u32) -> Self {
         let mut rng = rand::thread_rng();
         let mut hitables: Vec<Arc<Hitable>> = Vec::new();
         hitables.push(Arc::from(Sphere::new_from_f64(
@@ -30,7 +37,7 @@ impl Scene {
                 let choose_mat = rng.gen::<f64>();
                 let center =
                     Vector3::new(f64::from(a) + 0.9 * rng.gen::<f64>(), 0.2, f64::from(b) + 0.9 * rng.gen::<f64>());
-                if (center - Vector3::new(4.0, 0.2, 0.0)).norm() > 0.9 {
+                if (center - Vector3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
                     hitables.push(if choose_mat < 0.8 {
                         Arc::from(Sphere::new_from_vec(
                             center,
@@ -64,6 +71,7 @@ impl Scene {
         Scene {
             width,
             height,
+            samples,
             camera: Camera::new(
                 Vector3::new(-6.0, 4.0, 1.0),
                 Vector3::new(0.0, 0.0, -1.0),
@@ -75,7 +83,11 @@ impl Scene {
         }
     }
 
-    pub fn new_from_file() {}
+    pub fn get_width(&self) -> u32 { self.width }
+
+    pub fn get_height(&self) -> u32 { self.height }
+
+    pub fn get_sample_num(&self) -> u32 { self.samples }
 
     pub fn get_camera(&self) -> &Camera { &self.camera }
 
