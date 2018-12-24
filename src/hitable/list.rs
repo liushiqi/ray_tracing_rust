@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::{hitable::{HitRecord, Hitable},
             ray::Ray};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct HitableList {
     hitables: Vec<Arc<Hitable>>,
 }

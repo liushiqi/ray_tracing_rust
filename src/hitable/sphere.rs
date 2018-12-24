@@ -6,7 +6,7 @@ use crate::{hitable::{HitRecord, Hitable},
             material::Material,
             ray::Ray};
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Sphere {
     center: Vector3<f64>,
     radius: f64,

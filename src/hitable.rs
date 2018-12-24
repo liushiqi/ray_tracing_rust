@@ -24,6 +24,6 @@ impl HitRecord {
     }
 }
 
-pub trait Hitable: Debug {
+pub trait Hitable: Debug + Send + Sync {
     fn hit(&self, ray: &Ray, range: std::ops::Range<f64>) -> Option<HitRecord>;
 }
