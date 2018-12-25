@@ -4,7 +4,7 @@ use cgmath::{InnerSpace, Vector3};
 use rand::Rng;
 
 use crate::{camera::Camera,
-            hitable::{Hitable, HitableList, Sphere},
+            hitable::{BvhNode, Hitable, Sphere},
             material::{Dielectric, Lambertian, Metal}};
 
 #[derive(Debug)]
@@ -79,7 +79,7 @@ impl Scene {
                 90.0,
                 f64::from(width) / f64::from(height),
             ),
-            world: Arc::from(HitableList::new(hitables)),
+            world: Arc::from(BvhNode::new(&mut hitables, 0.0, 1.0)),
         }
     }
 

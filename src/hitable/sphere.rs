@@ -2,7 +2,8 @@ use std::sync::Arc;
 
 use cgmath::{InnerSpace, Vector3};
 
-use crate::{hitable::{HitRecord, Hitable},
+use crate::{aabb::AABBBox,
+            hitable::{HitRecord, Hitable},
             material::Material,
             ray::Ray};
 
@@ -51,5 +52,12 @@ impl Hitable for Sphere {
             }
         }
         None
+    }
+
+    fn bounding_box(&self, _t0: f64, _t1: f64) -> Option<AABBBox> {
+        Some(AABBBox::new(
+            self.center - Vector3::new(self.radius, self.radius, self.radius),
+            self.center + Vector3::new(self.radius, self.radius, self.radius),
+        ))
     }
 }

@@ -2,12 +2,15 @@ use std::{fmt::Debug, sync::Arc};
 
 use cgmath::{InnerSpace, Vector3};
 
-use crate::{material::Material, ray::Ray};
+use crate::{aabb::AABBBox, material::Material, ray::Ray};
 
+pub mod bvh;
 pub mod list;
 pub mod sphere;
 
+pub type BvhNode = self::bvh::BvhNode;
 pub type Sphere = self::sphere::Sphere;
+#[allow(dead_code)]
 pub type HitableList = self::list::HitableList;
 
 #[derive(Clone, Debug)]
@@ -26,4 +29,6 @@ impl HitRecord {
 
 pub trait Hitable: Debug + Send + Sync {
     fn hit(&self, ray: &Ray, range: std::ops::Range<f64>) -> Option<HitRecord>;
+
+    fn bounding_box(&self, t0: f64, t1: f64) -> Option<AABBBox>;
 }

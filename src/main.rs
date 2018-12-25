@@ -9,6 +9,7 @@ use rayon::prelude::*;
 use crate::{calc::{color, Color},
             scene::Scene};
 
+mod aabb;
 mod calc;
 mod camera;
 mod hitable;
@@ -22,6 +23,7 @@ const SAMPLES: u32 = 64;
 
 fn main() {
     get_args();
+    let start = std::time::Instant::now();
     let scene = Scene::new_random(IMAGE_WIDTH, IMAGE_HEIGHT, SAMPLES);
     let mut buffer = (0..(scene.get_height() * scene.get_width() * 3))
         .map(|x| {
@@ -34,6 +36,8 @@ fn main() {
             }
         })
         .collect::<Vec<_>>();
+    println!("Time of create array took {:?}", start.elapsed());
+    let start = std::time::Instant::now();
     buffer.par_chunks_mut((scene.get_width() * 3) as usize).for_each(|array| {
         array.chunks_mut(3).for_each(|array| {
             let index = u32::from(array[0]) + u32::from(array[1]) * 256 + u32::from(array[2]) * 256 * 256;
@@ -51,10 +55,13 @@ fn main() {
             array[2] = (col.z.sqrt() * 255.0) as u8;
         })
     });
+    println!("Time of calc array took {:?}", start.elapsed());
+    let start = std::time::Instant::now();
     ImageBuffer::<Rgb<u8>, Vec<u8>>::from_raw(scene.get_width(), scene.get_height(), buffer)
         .unwrap()
         .save("render.png")
         .unwrap();
+    println!("Time of save took {:?}", start.elapsed());
 }
 
 fn get_args<'a>() -> ArgMatches<'a> {
