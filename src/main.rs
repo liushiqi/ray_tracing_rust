@@ -16,6 +16,7 @@ mod hitable;
 mod material;
 mod ray;
 mod scene;
+mod texture;
 
 const IMAGE_WIDTH: u32 = 2560;
 const IMAGE_HEIGHT: u32 = 1440;

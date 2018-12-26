@@ -5,7 +5,8 @@ use rand::Rng;
 
 use crate::{camera::Camera,
             hitable::{BvhNode, Hitable, Sphere},
-            material::{Dielectric, Lambertian, Metal}};
+            material::{Dielectric, Lambertian, Metal},
+            texture::{CheckerTexture, ConstantTexture}};
 
 #[derive(Debug)]
 pub struct Scene {
@@ -30,23 +31,29 @@ impl Scene {
             -1000.0,
             0.0,
             1000.0,
-            Arc::from(Lambertian::new(0.5, 0.5, 0.5)),
+            Arc::from(Lambertian::new(Arc::new(CheckerTexture::new(
+                Arc::new(ConstantTexture::new(0.2, 0.3, 0.1)),
+                Arc::new(ConstantTexture::new(0.9, 0.9, 0.9)),
+            )))),
         )));
-        for a in -11..11 {
-            for b in -11..11 {
+        for a in -4..4 {
+            for b in -4..4 {
                 let choose_mat = rng.gen::<f64>();
-                let center =
-                    Vector3::new(f64::from(a) + 0.9 * rng.gen::<f64>(), 0.2, f64::from(b) + 0.9 * rng.gen::<f64>());
+                let center = Vector3::new(
+                    f64::from(a * 3) + 0.9 * rng.gen::<f64>(),
+                    0.2,
+                    f64::from(b * 3) + 0.9 * rng.gen::<f64>(),
+                );
                 if (center - Vector3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
                     hitables.push(if choose_mat < 0.8 {
                         Arc::from(Sphere::new_from_vec(
                             center,
                             0.2,
-                            Arc::from(Lambertian::new(
+                            Arc::from(Lambertian::new(Arc::new(ConstantTexture::new(
                                 rng.gen::<f64>() * rng.gen::<f64>(),
                                 rng.gen::<f64>() * rng.gen::<f64>(),
                                 rng.gen::<f64>() * rng.gen::<f64>(),
-                            )),
+                            )))),
                         ))
                     } else if choose_mat < 0.95 {
                         Arc::from(Sphere::new_from_vec(
@@ -66,8 +73,14 @@ impl Scene {
             }
         }
         hitables.push(Arc::from(Sphere::new_from_f64(0.0, 1.0, 0.0, 1.0, Arc::from(Dielectric::new(1.5)))));
-        hitables.push(Arc::from(Sphere::new_from_f64(-4.0, 1.0, 0.0, 1.0, Arc::from(Lambertian::new(0.4, 0.2, 0.1)))));
-        hitables.push(Arc::from(Sphere::new_from_f64(4.0, 1.0, 0.0, 1.0, Arc::from(Metal::new(0.7, 0.6, 0.5, 1.0)))));
+        hitables.push(Arc::from(Sphere::new_from_f64(
+            -4.0,
+            1.0,
+            0.0,
+            1.0,
+            Arc::from(Lambertian::new(Arc::new(ConstantTexture::new(0.4, 0.2, 0.1)))),
+        )));
+        hitables.push(Arc::from(Sphere::new_from_f64(4.0, 1.0, 0.0, 1.0, Arc::from(Metal::new(0.7, 0.6, 0.5, 0.0)))));
         Scene {
             width,
             height,
