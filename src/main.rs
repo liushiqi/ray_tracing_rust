@@ -2,28 +2,25 @@
 #![feature(box_patterns)]
 #![feature(range_contains)]
 
-use clap::{App, Arg, ArgMatches};
 use image::{ImageBuffer, Rgb};
 use rayon::prelude::*;
 
-use crate::{calc::{color, Color},
+use crate::{math::{color, Color},
             scene::Scene};
 
-mod aabb;
-mod calc;
 mod camera;
 mod hitable;
 mod material;
+mod math;
 mod ray;
 mod scene;
 mod texture;
 
 const IMAGE_WIDTH: u32 = 2560;
 const IMAGE_HEIGHT: u32 = 1440;
-const SAMPLES: u32 = 64;
+const SAMPLES: u32 = 128;
 
 fn main() {
-    get_args();
     let start = std::time::Instant::now();
     let scene = Scene::new_random(IMAGE_WIDTH, IMAGE_HEIGHT, SAMPLES);
     let mut buffer = (0..(scene.get_height() * scene.get_width() * 3))
@@ -63,13 +60,4 @@ fn main() {
         .save("render.png")
         .unwrap();
     println!("Time of save took {:?}", start.elapsed());
-}
-
-fn get_args<'a>() -> ArgMatches<'a> {
-    App::new("rtrs")
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .version(env!("CARGO_PKG_VERSION"))
-        .about(env!("CARGO_PKG_DESCRIPTION"))
-        .arg(Arg::with_name("SCENE").long("scene").short("s").help("Scene File (TODO)").takes_value(true))//.required(true))
-        .get_matches()
 }

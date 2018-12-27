@@ -1,12 +1,8 @@
 use std::sync::Arc;
 
-use cgmath::{InnerSpace, Vector3};
-use rand::Rng;
+use cgmath::Vector3;
 
-use crate::{camera::Camera,
-            hitable::{BvhNode, Hitable, Sphere},
-            material::{Dielectric, Lambertian, Metal},
-            texture::{CheckerTexture, ConstantTexture}};
+use crate::{camera::Camera, hitable::Object};
 
 #[derive(Debug)]
 pub struct Scene {
@@ -14,73 +10,18 @@ pub struct Scene {
     height: u32,
     samples: u32,
     camera: Camera,
-    world: Arc<Hitable>,
+    world: Arc<Object>,
 }
 
 impl Scene {
     #[allow(dead_code)]
-    pub fn new(width: u32, height: u32, samples: u32, camera: Camera, world: Arc<Hitable>) -> Self {
+    pub fn new(width: u32, height: u32, samples: u32, camera: Camera, world: Arc<Object>) -> Self {
         Scene { width, height, samples, camera, world }
     }
 
+    #[allow(dead_code)]
     pub fn new_random(width: u32, height: u32, samples: u32) -> Self {
-        let mut rng = rand::thread_rng();
-        let mut hitables: Vec<Arc<Hitable>> = Vec::new();
-        hitables.push(Arc::from(Sphere::new_from_f64(
-            0.0,
-            -1000.0,
-            0.0,
-            1000.0,
-            Arc::from(Lambertian::new(Arc::new(CheckerTexture::new(
-                Arc::new(ConstantTexture::new(0.2, 0.3, 0.1)),
-                Arc::new(ConstantTexture::new(0.9, 0.9, 0.9)),
-            )))),
-        )));
-        for a in -4..4 {
-            for b in -4..4 {
-                let choose_mat = rng.gen::<f64>();
-                let center = Vector3::new(
-                    f64::from(a * 3) + 0.9 * rng.gen::<f64>(),
-                    0.2,
-                    f64::from(b * 3) + 0.9 * rng.gen::<f64>(),
-                );
-                if (center - Vector3::new(4.0, 0.2, 0.0)).magnitude() > 0.9 {
-                    hitables.push(if choose_mat < 0.8 {
-                        Arc::from(Sphere::new_from_vec(
-                            center,
-                            0.2,
-                            Arc::from(Lambertian::new(Arc::new(ConstantTexture::new(
-                                rng.gen::<f64>() * rng.gen::<f64>(),
-                                rng.gen::<f64>() * rng.gen::<f64>(),
-                                rng.gen::<f64>() * rng.gen::<f64>(),
-                            )))),
-                        ))
-                    } else if choose_mat < 0.95 {
-                        Arc::from(Sphere::new_from_vec(
-                            center,
-                            0.2,
-                            Arc::from(Metal::new(
-                                (rng.gen::<f64>() + 1.0) * 0.5,
-                                (rng.gen::<f64>() + 1.0) * 0.5,
-                                (rng.gen::<f64>() + 1.0) * 0.5,
-                                rng.gen::<f64>() * 0.5,
-                            )),
-                        ))
-                    } else {
-                        Arc::from(Sphere::new_from_vec(center, 0.2, Arc::from(Dielectric::new(1.5))))
-                    })
-                }
-            }
-        }
-        hitables.push(Arc::from(Sphere::new_from_f64(0.0, 1.0, 0.0, 1.0, Arc::from(Dielectric::new(1.5)))));
-        hitables.push(Arc::from(Sphere::new_from_f64(
-            -4.0,
-            1.0,
-            0.0,
-            1.0,
-            Arc::from(Lambertian::new(Arc::new(ConstantTexture::new(0.4, 0.2, 0.1)))),
-        )));
-        hitables.push(Arc::from(Sphere::new_from_f64(4.0, 1.0, 0.0, 1.0, Arc::from(Metal::new(0.7, 0.6, 0.5, 0.0)))));
+        let hitables = Arc::new(crate::hitable::Sphere { center: Vector3::new(0.0, 0.0, 0.0), radius: 1.0 } );
         Scene {
             width,
             height,
@@ -92,7 +33,7 @@ impl Scene {
                 90.0,
                 f64::from(width) / f64::from(height),
             ),
-            world: Arc::from(BvhNode::new(&mut hitables, 0.0, 1.0)),
+            world: hitables,
         }
     }
 
@@ -104,5 +45,5 @@ impl Scene {
 
     pub fn get_camera(&self) -> &Camera { &self.camera }
 
-    pub fn get_world(&self) -> &Arc<Hitable> { &self.world }
+    pub fn get_world(&self) -> &Arc<Object> { &self.world }
 }

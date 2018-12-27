@@ -1,15 +1,11 @@
 use std::fmt::Debug;
 
-use crate::{calc::Color, hitable::HitRecord, ray::Ray};
+use cgmath::Vector3;
 
-pub mod dielectric;
-pub mod lambertian;
-pub mod metal;
-
-pub type Lambertian = self::lambertian::Lambertian;
-pub type Metal = self::metal::Metal;
-pub type Dielectric = self::dielectric::Dielectric;
+use crate::{math::Color, ray::Ray};
 
 pub trait Material: Debug + Send + Sync {
-    fn scatter(&self, ray_in: Ray, record: HitRecord) -> Option<(Color, Ray)>;
+    fn scatter(&self, ray_in: Ray) -> Option<(Color, Ray)>;
+
+    fn emitted(&self, _u: f64, _v: f64, _position: Vector3<f64>) -> Vector3<f64> { Vector3::new(0.0, 0.0, 0.0) }
 }
